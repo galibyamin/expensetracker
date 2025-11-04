@@ -1,0 +1,48 @@
+<!-- expenses/templates/expenses/expense_list.html -->
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+<h1>💰 Expense Tracker</h1>
+
+<div style="margin-bottom: 20px;">
+    <a href="{% url 'add_expense' %}" class="btn">➕ Add New Expense</a>
+</div>
+
+<div style="background-color: #e7f3ff; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+    <h2 style="margin: 0;">Total Expenses: ${{ total }}</h2>
+</div>
+
+{% if expenses %}
+<table style="width: 100%; border-collapse: collapse;">
+    <thead>
+        <tr style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+            <th style="padding: 12px; text-align: left;">Date</th>
+            <th style="padding: 12px; text-align: left;">Category</th>
+            <th style="padding: 12px; text-align: left;">Description</th>
+            <th style="padding: 12px; text-align: right;">Amount</th>
+            <th style="padding: 12px; text-align: center;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for expense in expenses %}
+        <tr style="border-bottom: 1px solid #dee2e6;">
+            <td style="padding: 12px;">{{ expense.date|date:"M d, Y" }}</td>
+            <td style="padding: 12px;">
+                <span style="background-color: #007bff; color: white; padding: 4px 8px; border-radius: 3px; font-size: 12px;">
+                    {{ expense.get_category_display }}
+                </span>
+            </td>
+            <td style="padding: 12px;">{{ expense.description }}</td>
+            <td style="padding: 12px; text-align: right; font-weight: bold;">${{ expense.amount }}</td>
+            <td style="padding: 12px; text-align: center;">
+                <a href="{% url 'delete_expense' expense.pk %}" class="btn btn-danger" style="padding: 5px 10px; font-size: 14px;">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p style="text-align: center; color: #666; padding: 40px;">No expenses yet. Click "Add New Expense" to get started!</p>
+{% endif %}
+
+{% endblock %}
